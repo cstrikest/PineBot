@@ -10,6 +10,5 @@ if __name__ == '__main__':
     
     
 # TODO: 合并chromedriver
-# TODO: 正在直播监控列表改进 保存文件or开机时抓一次
 # TODO: json读取列表等功能的整合
 # TODO: 建立日志 记录每条消息
