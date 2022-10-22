@@ -13,8 +13,8 @@ bilibili_live_notification_uid_list_path = "./Pinebot_main/json/bilibili_live_no
 announce_group_list_path = "./Pinebot_main/json/announce_group_list.json"
 
 bot = get_bot()
-living_list = []
-live_status = {}
+living_list = []    # 当前正在直播中的用户uid List， 用于
+live_status = {}    # 储存用户直播状态的Dict {uid:0 or 1 or 2} 0关闭 1直播中 2轮播
 with open("./Pinebot_main/json/live_notification_activate_group.json", "r") as f:
 	activate_group = json.load(f)
 #test dp bjm fanzhen
@@ -23,29 +23,37 @@ if not os.path.exists(bilibili_live_notification_uid_list_path):
 	with open(bilibili_live_notification_uid_list_path, "w", encoding = "utf-8") as f:
 		f.write("[]")
 
+# 从文件读取直播监控用户列表
+def get_uid_list_from_json(path):
+	with open(path, "r", encoding = "utf-8") as f:
+		return json.load(f)
+		
+# 使用bilibili API获取已添加监控用户的直播间状态
 def get_live_status_info():
-	with open(bilibili_live_notification_uid_list_path, "r", encoding = "utf-8") as f:
-		user_uid_list = json.load(f)
+	user_uid_list = get_uid_list_from_json(bilibili_live_notification_uid_list_path)
 	get_msg = ""
 	for i in range(0, len(user_uid_list)):
 		get_msg += "uids[{}]={}&".format(i,user_uid_list[i])
-		
 	result = requests.get(GET_STATUS_INFO_BY_UIDS_API_URL + get_msg)
 	result = json.loads(result.text)
 	return result
 	
-def setup_live_status_list():
+# 添加新用户或重启机器人时初始化状态
+def init_live_status_list():
 	global live_status
+	global living_list
 	live_status = {}
-	with open(bilibili_live_notification_uid_list_path, "r", encoding = "utf-8") as f:
-		user_uid_list = json.load(f)
-	for uid in user_uid_list:
-		if uid in living_list:
-			live_status[uid] = 1
-		else:
-			live_status[uid] = 0
+	result = get_live_status_info()
+	if result["data"] != []:
+		for user in result["data"].values():
+			if user["live_status"] == 1 :
+				if user["uid"] not in living_list:
+					living_list.append(user["uid"])
+				live_status[user["uid"]] = 1
+			else:
+				live_status[user["uid"]] = 0
 
-setup_live_status_list()
+init_live_status_list()
 
 
 # 刷新直播状态 返回是否触发，触发uid
@@ -54,20 +62,19 @@ def refresh_live_status():
 	global living_list
 	result = get_live_status_info()
 	if result["data"] != []:
-		print(live_status)
-		for user in result["data"].values():
+		for user_now in result["data"].values():
 			try:
 				# 从别的变1
-				if live_status[user["uid"]] != user["live_status"]:
-					if user["live_status"] == 1 and user["uid"] not in living_list:
-						living_list.append(user["uid"])
-						return True, user["uid"], user["uname"], user["title"], user["room_id"]
-					elif user["live_status"] == 0 or user["live_status"] == 2 and user["uid"] in living_list:
-						living_list.remove(user["uid"])
+				if live_status[user_now["uid"]] != user_now["live_status"]:
+					if user_now["live_status"] == 1 and user_now["uid"] not in living_list:
+						living_list.append(user_now["uid"])
+						return True, user_now["uid"], user_now["uname"], user_now["title"], user_now["room_id"]
+					elif user_now["live_status"] == 0 or user_now["live_status"] == 2 and user_now["uid"] in living_list:
+						living_list.remove(user_now["uid"])
 						return False, 0, None, None, None
 			except: 
-				live_status[user["uid"]] = user["live_status"]
-			live_status[user["uid"]] = user["live_status"]
+				live_status[user_now["uid"]] = user_now["live_status"]
+			live_status[user_now["uid"]] = user_now["live_status"]
 	return False, 0, None, None, None
 	
 @scheduler.scheduled_job('interval', seconds = 5)
@@ -126,7 +133,7 @@ async def handle_group_message(ctx):
 				user_uid_list.append(uid)
 				with open(bilibili_live_notification_uid_list_path, "w", encoding = "utf-8") as f:
 					f.write(json.dumps(user_uid_list, ensure_ascii = False, indent = 1))
-				setup_live_status_list()
+				init_live_status_list()
 				await bot.send_group_msg(group_id = g, message = u"成功添加" + user_name + "的直播间" + room_name + "到监控列表。")
 			else:
 				await bot.send_group_msg(group_id = g, message = u"添加失败。")
@@ -157,7 +164,7 @@ async def handle_group_message(ctx):
 				with open(bilibili_live_notification_uid_list_path, "w", encoding = "utf-8") as f:
 					f.write(json.dumps(user_uid_list, ensure_ascii = False, indent = 1))
 					
-				setup_live_status_list()
+				init_live_status_list()
 				await bot.send_group_msg(group_id = g, message = u"成功从监控列表删除" + user_name + "的直播间" + room_name + "。")
 			else:
 				await bot.send_group_msg(group_id = g, message = u"删除失败。")
