@@ -26,7 +26,8 @@ prefs = {
 }
 
 chrome_options.add_experimental_option('prefs', prefs)  # 禁用浏览器弹窗
-browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
+# browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
+browser = webdriver.Chrome("/usr/bin/chromedriver", options = chrome_options)
 
 # driver = Chrome(executable_path="/usr/bin/chromedriver", options = opt)
 with open("./Pinebot_main/json/SDVXData.json", "r", encoding = "utf-8") as f:

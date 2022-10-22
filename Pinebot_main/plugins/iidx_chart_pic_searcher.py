@@ -124,7 +124,9 @@ def get_chart_cmd(cmd, playSide, diffculty):
 		
 		url = "http://textage.cc/score/" + str(song[1][2]) + "/" + song[
 			1][1] + ".html?" + chart_type + level +"00" + set["mirror"] + "=" + set["hs"] + set["clip"]
-		browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
+		# browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
+		
+		browser = webdriver.Chrome("/usr/bin/chromedriver", options = chrome_options)
 		browser.get(url)
 		browser.execute_script("var a = document.getElementsByTagName('input').length;for (var i = 0; i < a; i++) document.getElementsByTagName('input')[0].remove();")
 		
@@ -132,7 +134,7 @@ def get_chart_cmd(cmd, playSide, diffculty):
 		height = browser.execute_script("return document.documentElement.scrollHeight")
 		print(width,height)
 		browser.set_window_size(width, height)
-		browser.get_screenshot_as_file("./go-cqhttp/data/images/chart.jpg")
+		browser.get_screenshot_as_file("./go-cqhttp/data/images/chart.png")
 		browser.close()
 		browser.quit()
 	except Exception as e:
@@ -149,63 +151,63 @@ async def handle_group_message(ctx):
 	if args[0] == "-spe":
 		msg, flag = get_chart_cmd(args[1:], 0, 0)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-spn":
 		msg, flag = get_chart_cmd(args[1:], 0, 1)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-sph":
 		msg, flag = get_chart_cmd(args[1:], 0, 2)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-spa":
 		msg, flag = get_chart_cmd(args[1:], 0, 3)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-spl":
 		msg, flag = get_chart_cmd(args[1:], 0, 4)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-dpn":
 		msg, flag = get_chart_cmd(args[1:], 2, 1)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-dph":
 		msg, flag = get_chart_cmd(args[1:], 2, 2)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-dpa":
 		msg, flag = get_chart_cmd(args[1:], 2, 3)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	
 	elif args[0] == "-dpl":
 		msg, flag = get_chart_cmd(args[1:], 2, 4)
 		if flag:
-			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.jpg]" + msg)
+			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 			
