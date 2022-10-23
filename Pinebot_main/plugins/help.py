@@ -56,7 +56,7 @@ async def handle_group_message(ctx):
 		await bot.send_group_msg(group_id = g, message = msg_iidx)
 		await bot.send_group_msg(group_id = g, message = msg_dx)
 		await bot.send_group_msg(group_id = g, message = msg_sdvx)
-		await bot.send_group_msg(group_id = g, message = msg_ex)
+		# await bot.send_group_msg(group_id = g, message = msg_ex)
 		if g in activate_group:
 			await bot.send_group_msg(group_id = g, message = msg_live)
 

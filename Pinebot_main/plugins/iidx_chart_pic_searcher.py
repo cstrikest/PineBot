@@ -2,16 +2,11 @@
 
 __author__ = "Yxzh"
 from nonebot import *
-from selenium import webdriver
 from Pinebot_main.util.logger import add_log
+import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 import difflib
 import json
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("no-sandbox")
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--headless")
 
 bot = get_bot()
 
@@ -122,22 +117,15 @@ def get_chart_cmd(cmd, playSide, diffculty):
 		elif level == "12":
 			level = "C"
 		
+		url = "http://textage.cc/score/" + str(song[1][2]) + "/" + song[1][1] + ".html?" + chart_type + level +"00" + set["mirror"] + "=" + set["hs"] + set["clip"]
+		Chrome_Driver.browser.set_window_size(1,1)
+		Chrome_Driver.browser.get(url)
+		Chrome_Driver.browser.execute_script("var a = document.getElementsByTagName('input').length;for (var i = 0; i < a; i++) document.getElementsByTagName('input')[0].remove();")
+		width = Chrome_Driver.browser.execute_script("return document.documentElement.scrollWidth")
+		height = Chrome_Driver.browser.execute_script("return document.documentElement.scrollHeight")
+		Chrome_Driver.browser.set_window_size(width, height)
+		Chrome_Driver.browser.get_screenshot_as_file("./go-cqhttp/data/images/chart.png")
 		
-		url = "http://textage.cc/score/" + str(song[1][2]) + "/" + song[
-			1][1] + ".html?" + chart_type + level +"00" + set["mirror"] + "=" + set["hs"] + set["clip"]
-		# browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
-		
-		browser = webdriver.Chrome("/usr/bin/chromedriver", options = chrome_options)
-		browser.get(url)
-		browser.execute_script("var a = document.getElementsByTagName('input').length;for (var i = 0; i < a; i++) document.getElementsByTagName('input')[0].remove();")
-		
-		width = browser.execute_script("return document.documentElement.scrollWidth")
-		height = browser.execute_script("return document.documentElement.scrollHeight")
-		print(width,height)
-		browser.set_window_size(width, height)
-		browser.get_screenshot_as_file("./go-cqhttp/data/images/chart.png")
-		browser.close()
-		browser.quit()
 	except Exception as e:
 		print(e)
 		return "获取谱面图片时发生错误\n", False

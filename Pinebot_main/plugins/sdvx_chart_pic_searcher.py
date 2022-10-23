@@ -3,38 +3,19 @@
 __author__ = "Yxzh"
 
 from PIL import Image
-from selenium import webdriver
+import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 import json
 import difflib
 import requests
+from Pinebot_main.util.logger import add_log
 from io import BytesIO
-from os import path
 from nonebot import *
+
 
 bot = get_bot()
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("no-sandbox")
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--headless")
-chrome_options.add_argument('blink-settings=imagesEnabled=false')
-prefs = {
-	'profile.default_content_setting_values': {
-		'notifications': 2
-	}
-}
-
-chrome_options.add_experimental_option('prefs', prefs)  # 禁用浏览器弹窗
-# browser = webdriver.Chrome("/usr/lib/chromium-browser/chromedriver", options = chrome_options)
-browser = webdriver.Chrome("/usr/bin/chromedriver", options = chrome_options)
-
-# driver = Chrome(executable_path="/usr/bin/chromedriver", options = opt)
 with open("./Pinebot_main/json/SDVXData.json", "r", encoding = "utf-8") as f:
 	songs = json.load(f)
-
-# with open("../dataSpider/JSON/SDVXData.json", "r", encoding = "utf-8") as f:
-# 	songs = json.load(f)
 
 diffcultyList = ["hardest", "z2", "n2", "a2", "e2", "m2", "f2", "i2", "g2", "h2", "v2"]
 
@@ -64,10 +45,10 @@ def get_chart_cmd(searchSongName, diffculty):
 	
 	try:
 		url = song[3]
-		browser.get(url)
-		bgImgUrl = browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/img").get_attribute("src")
-		chartImgUrl = browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[1]/img").get_attribute("src")
-		barImgUrl = browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[2]/img").get_attribute("src")
+		Chrome_Driver.browser.get(url)
+		bgImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/img").get_attribute("src")
+		chartImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[1]/img").get_attribute("src")
+		barImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[2]/img").get_attribute("src")
 		
 		bgImg = Image.open(BytesIO(requests.get(bgImgUrl).content))
 		chartImg = Image.open(BytesIO(requests.get(chartImgUrl).content))
@@ -119,54 +100,63 @@ async def handle_group_message(ctx):
 	if args[0] == "-sv":
 		msg, flag = get_chart_cmd(args[1:], "hardest")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svn":
 		msg, flag = get_chart_cmd(args[1:], "n2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-sva":
 		msg, flag = get_chart_cmd(args[1:], "a2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-sve":
 		msg, flag = get_chart_cmd(args[1:], "e2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svm":
 		msg, flag = get_chart_cmd(args[1:], "m2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svi":
 		msg, flag = get_chart_cmd(args[1:], "i2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svg":
 		msg, flag = get_chart_cmd(args[1:], "g2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svh":
 		msg, flag = get_chart_cmd(args[1:], "h2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svv":
 		msg, flag = get_chart_cmd(args[1:], "v2")
 		if flag:
+			add_log(ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
