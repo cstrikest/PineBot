@@ -4,3 +4,5 @@
 /Pinebot_main/util/geckodriver.log
 /Pinebot_main/util/chromedriver.exe
 /Pinebot_main/json/
+/Pinebot_main/VITS_Paimon/colab.ipynb
+/Pinebot_main/VITS_Paimon/inference.ipynb

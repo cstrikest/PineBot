@@ -43,10 +43,8 @@ def get_paimon_voice_file(text: str):
 	stn_tst = get_text(text, hps)
 	with torch.no_grad():
 		x_tst = stn_tst.unsqueeze(0)
-	x_tst_lengths = torch.LongTensor([stn_tst.size(0)])
-	audio = net_g.infer(x_tst, x_tst_lengths, noise_scale=.667, noise_scale_w=0.8, length_scale=1.5)[0][0,0].data.numpy()
-	net_g.zero_grad()
-	# ipd.display(ipd.Audio(audio, rate=hps.data.sampling_rate))
+		x_tst_lengths = torch.LongTensor([stn_tst.size(0)])
+		audio = net_g.infer(x_tst, x_tst_lengths, noise_scale=.667, noise_scale_w=0.8, length_scale=1.4)[0][0,0].data.numpy()
 	sf.write("./go-cqhttp/data/voices/paimon.wav",audio,samplerate=hps.data.sampling_rate)
 	
 	torch.cuda.empty_cache()
@@ -63,7 +61,7 @@ async def handle_group_message(ctx):
 	g = ctx["group_id"]
 	args = ctx["raw_message"].split()
 	if args[0] == u"派蒙" and len(args) > 1:
-		if len(ctx["raw_message"]) < 30:
+		if len(ctx["raw_message"]) < 50:
 			get_paimon_voice_file(args[1:])
 			add_log(ctx, ctx["raw_message"])
 			await bot.send_group_msg(group_id = g, message = "[CQ:record,file=paimon.wav]")
