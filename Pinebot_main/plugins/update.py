@@ -4,7 +4,6 @@ __author__ = "Yxzh"
 
 import json
 from bs4 import BeautifulSoup
-from selenium import webdriver
 from nonebot import *
 import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 

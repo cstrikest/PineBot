@@ -8,7 +8,5 @@ if __name__ == '__main__':
     n.load_plugins("./Pinebot_main/plugins", "Pinebot_main.plugins")
     n.run(host = "127.0.0.1", port = 16241, debug = False)
     
-    
-# TODO: 合并chromedriver
+
 # TODO: json读取列表等功能的整合
-# TODO: 建立日志 记录每条消息

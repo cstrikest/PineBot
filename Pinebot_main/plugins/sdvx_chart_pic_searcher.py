@@ -44,54 +44,31 @@ def get_chart_cmd(searchSongName, diffculty):
 		return "搜索歌曲错误。", False
 	
 	try:
+		print("===")
 		url = song[3]
 		Chrome_Driver.browser.get(url)
 		bgImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/img").get_attribute("src")
 		chartImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[1]/img").get_attribute("src")
 		barImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[2]/img").get_attribute("src")
 		
+		print("===")
 		bgImg = Image.open(BytesIO(requests.get(bgImgUrl).content))
 		chartImg = Image.open(BytesIO(requests.get(chartImgUrl).content))
 		barImg = Image.open(BytesIO(requests.get(barImgUrl).content))
 		
+		print("===")
 		bgImg = bgImg.convert("RGBA")
 		chartImg = chartImg.convert("RGBA")
 		barImg = barImg.convert("RGBA")
 		
+		print("===")
 		resultImg = Image.alpha_composite(Image.alpha_composite(bgImg, chartImg), barImg)
 		resultImg.save("./go-cqhttp/data/images/chart.png")
-	# resultImg.save("./result.png")
 	except Exception as e:
 		print(e)
 		return song[0] + "的谱面图片暂时无法显示。", False
-	
-	
-	# notes = driver.find_element_by_xpath(
-	# 	"/html/body/table[1]/tbody/tr[2]/td[2]/table/tbody/tr/td[3]/table/tbody/tr[2]/td/table/tbody/tr/td[1]/div/table/tbody/tr/td[3]/div").text
-	# bpm = driver.find_element_by_xpath(
-	# 	"/html/body/table[1]/tbody/tr[2]/td[2]/table/tbody/tr/td[3]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/div/table/tbody/tr/td[3]/div").text
-	# generation = driver.find_element_by_xpath(
-	# 	"/html/body/table[1]/tbody/tr[2]/td[2]/table/tbody/tr/td[3]/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr/td/img").get_attribute(
-	# 	"src")
-	# if "sdvx01" in generation:
-	# 	generation = "1代谱面"
-	# elif "sdvx02" in generation:
-	# 	generation = "2代谱面"
-	# elif "sdvx03" in generation:
-	# 	generation = "3代谱面"
-	# elif "sdvx04" in generation:
-	# 	generation = "4代谱面"
-	# elif "sdvx05" in generation:
-	# 	generation = "5代谱面"
-	# elif "sdvx06" in generation:
-	# 	generation = "6代谱面"
-	# else:
-	# 	generation = ""
-	
-	# return "Level " + song[2] + "\n" + song[
-	# 	0] + "\n" + generation + "\nCHAIN " + notes + "  BPM " + bpm + "\n", True
+
 	return "Level " + song[2] + "\n" + song[0], True
-# print(get_chart_cmd("seasickness", "hardest"))#
 
 @bot.on_message("group")
 async def handle_group_message(ctx):
