@@ -27,7 +27,7 @@ if not os.path.exists(bilibili_live_notification_uid_list_path):
 def get_uid_list_from_json(path):
 	with open(path, "r", encoding = "utf-8") as f:
 		return json.load(f)
-		
+
 # 使用bilibili API获取已添加监控用户的直播间状态
 def get_live_status_info():
 	user_uid_list = get_uid_list_from_json(bilibili_live_notification_uid_list_path)
@@ -37,7 +37,7 @@ def get_live_status_info():
 	result = requests.get(GET_STATUS_INFO_BY_UIDS_API_URL + get_msg)
 	result = json.loads(result.text)
 	return result
-	
+
 # 添加新用户或重启机器人时初始化状态
 def init_live_status_list():
 	global live_status
@@ -76,8 +76,8 @@ def refresh_live_status():
 				live_status[user_now["uid"]] = user_now["live_status"]
 			live_status[user_now["uid"]] = user_now["live_status"]
 	return False, 0, None, None, None
-	
-@scheduler.scheduled_job('interval', seconds = 5)
+
+@scheduler.scheduled_job('interval', seconds = 10)
 async def _():
 	global live_status
 	trigger, uid, uname, title, room_id= refresh_live_status()
@@ -85,7 +85,7 @@ async def _():
 		for group in activate_group:
 			# test
 			await bot.send_group_msg(group_id=group,message="{}开始直播。\n{}\nhttp://live.bilibili.com/{}".format(uname,title,room_id))
-			
+
 
 @bot.on_message("group")
 async def handle_group_message(ctx):
@@ -106,8 +106,8 @@ async def handle_group_message(ctx):
 			for room in result["data"].values():
 				msg += "\n" + room["uname"]
 			await bot.send_group_msg(group_id = g, message = msg)
-				
-		
+
+
 		if args[0] == u"-liveadd" and len(args) == 2: 
 			try:
 				room_id = int(args[1])
@@ -123,7 +123,7 @@ async def handle_group_message(ctx):
 			user_name = result["data"]["anchor_info"]["base_info"]["uname"]
 			uid = result["data"]["room_info"]["uid"]
 			room_name = result["data"]["room_info"]["title"]
-			
+
 			if isinstance(uid, int):
 				with open(bilibili_live_notification_uid_list_path, "r", encoding = "utf-8") as f:
 					user_uid_list = json.load(f)
@@ -137,7 +137,7 @@ async def handle_group_message(ctx):
 				await bot.send_group_msg(group_id = g, message = u"成功添加" + user_name + "的直播间" + room_name + "到监控列表。")
 			else:
 				await bot.send_group_msg(group_id = g, message = u"添加失败。")
-		
+
 		if args[0] == u"-livedel" and len(args) == 2:
 			try:
 				room_id = int(args[1])
@@ -163,9 +163,9 @@ async def handle_group_message(ctx):
 					return
 				with open(bilibili_live_notification_uid_list_path, "w", encoding = "utf-8") as f:
 					f.write(json.dumps(user_uid_list, ensure_ascii = False, indent = 1))
-					
+
 				init_live_status_list()
 				await bot.send_group_msg(group_id = g, message = u"成功从监控列表删除" + user_name + "的直播间" + room_name + "。")
 			else:
 				await bot.send_group_msg(group_id = g, message = u"删除失败。")
-	
+
