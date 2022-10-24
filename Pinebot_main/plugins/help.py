@@ -52,13 +52,14 @@ async def handle_group_message(ctx):
 	g = ctx["group_id"]
 	args = ctx["raw_message"].split()
 	if args[0] == u"-help" and len(args) == 1:
+		await bot.send_group_msg(group_id = g, message = "[CQ:image,file=help.png]")
 		# await bot.send_group_msg(group_id = g, message = "[CQ:image,file=help.png]")
-		await bot.send_group_msg(group_id = g, message = msg_iidx)
-		await bot.send_group_msg(group_id = g, message = msg_dx)
-		await bot.send_group_msg(group_id = g, message = msg_sdvx)
+		# await bot.send_group_msg(group_id = g, message = msg_iidx)
+		# await bot.send_group_msg(group_id = g, message = msg_dx)
+		# await bot.send_group_msg(group_id = g, message = msg_sdvx)
 		# await bot.send_group_msg(group_id = g, message = msg_ex)
-		if g in activate_group:
-			await bot.send_group_msg(group_id = g, message = msg_live)
+		# if g in activate_group:
+		# 	await bot.send_group_msg(group_id = g, message = msg_live)
 
 
 # {
