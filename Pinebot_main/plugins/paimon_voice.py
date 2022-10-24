@@ -63,7 +63,7 @@ async def handle_group_message(ctx):
 	g = ctx["group_id"]
 	args = ctx["raw_message"].split()
 	if args[0] == u"派蒙" and len(args) > 1:
-		if len(ctx["raw_message"]) < 35:
+		if len(ctx["raw_message"]) < 30:
 			get_paimon_voice_file(args[1:])
 			add_log(ctx, ctx["raw_message"])
 			await bot.send_group_msg(group_id = g, message = "[CQ:record,file=paimon.wav]")
