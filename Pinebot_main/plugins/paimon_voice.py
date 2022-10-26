@@ -31,20 +31,17 @@ net_g = SynthesizerTrn(
 	len(symbols),
 	hps.data.filter_length // 2 + 1,
 	hps.train.segment_size // hps.data.hop_length,
-	**hps.model)
+	**hps.model).cpu()
 net_g.eval()
 
 utils.load_checkpoint('./Pinebot_main/VITS_Paimon/G_1434000.pth', net_g, None)
-
-# torch.load('./Pinebot_main/VITS_Paimon/G_1434000.pth', map_location='cpu')
-
 
 def get_paimon_voice_file(text: str):
 	stn_tst = get_text(text, hps)
 	with torch.no_grad():
 		x_tst = stn_tst.unsqueeze(0)
-		x_tst_lengths = torch.LongTensor([stn_tst.size(0)])
-		audio = net_g.infer(x_tst, x_tst_lengths, noise_scale=.667, noise_scale_w=0.8, length_scale=1.4)[0][0,0].data.numpy()
+		x_tst_lengths = torch.LongTensor([stn_tst.size(0)]).cpu()
+		audio = net_g.infer(x_tst, x_tst_lengths, noise_scale=.667, noise_scale_w=0.8, length_scale=1.4)[0][0,0].data.cpu().float().numpy()
 	sf.write("./go-cqhttp/data/voices/paimon.wav",audio,samplerate=hps.data.sampling_rate)
 	
 	torch.cuda.empty_cache()
