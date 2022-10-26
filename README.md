@@ -6,8 +6,9 @@
 * Sound Voltex 谱面查询
 * Bilibili 直播通知
 * Bilibili RTMP推流转发
-### 依赖项
-* nonebot
-* selenium (chromedriver)
-* beautifulsoup4
-* requests
+* VITS语音 派蒙
+
+### 计划中的功能
+* 脏话计数
+* BMS谱面查询
+* 其他VITS语音
