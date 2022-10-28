@@ -2,7 +2,7 @@
 
 __author__ = "Yxzh"
 from nonebot import *
-from Pinebot_main.util.logger import add_log
+from Pinebot_main.util.logger import *
 import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 import difflib
 import json
@@ -140,7 +140,7 @@ async def handle_group_message(ctx):
 	if args[0] == "-spe":
 		msg, flag = get_chart_cmd(args[1:], 0, 0)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -148,7 +148,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-spn":
 		msg, flag = get_chart_cmd(args[1:], 0, 1)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -156,7 +156,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-sph":
 		msg, flag = get_chart_cmd(args[1:], 0, 2)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -164,7 +164,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-spa":
 		msg, flag = get_chart_cmd(args[1:], 0, 3)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -172,7 +172,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-spl":
 		msg, flag = get_chart_cmd(args[1:], 0, 4)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -180,7 +180,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-dpn":
 		msg, flag = get_chart_cmd(args[1:], 2, 1)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -188,7 +188,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-dph":
 		msg, flag = get_chart_cmd(args[1:], 2, 2)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -196,7 +196,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-dpa":
 		msg, flag = get_chart_cmd(args[1:], 2, 3)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
@@ -204,7 +204,7 @@ async def handle_group_message(ctx):
 	elif args[0] == "-dpl":
 		msg, flag = get_chart_cmd(args[1:], 2, 4)
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("IIDX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)

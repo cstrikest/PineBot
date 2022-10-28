@@ -7,7 +7,7 @@ import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 import json
 import difflib
 import requests
-from Pinebot_main.util.logger import add_log
+from Pinebot_main.util.logger import *
 from io import BytesIO
 from nonebot import *
 
@@ -77,63 +77,63 @@ async def handle_group_message(ctx):
 	if args[0] == "-sv":
 		msg, flag = get_chart_cmd(args[1:], "hardest")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svn":
 		msg, flag = get_chart_cmd(args[1:], "n2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-sva":
 		msg, flag = get_chart_cmd(args[1:], "a2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-sve":
 		msg, flag = get_chart_cmd(args[1:], "e2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svm":
 		msg, flag = get_chart_cmd(args[1:], "m2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svi":
 		msg, flag = get_chart_cmd(args[1:], "i2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svg":
 		msg, flag = get_chart_cmd(args[1:], "g2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svh":
 		msg, flag = get_chart_cmd(args[1:], "h2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)
 	elif args[0] == "-svv":
 		msg, flag = get_chart_cmd(args[1:], "v2")
 		if flag:
-			add_log(ctx, ctx["raw_message"] + " => " + msg)
+			add_log("SDVX_PIC", ctx, ctx["raw_message"] + " => " + msg)
 			await bot.send_group_msg(group_id = g, message = "[CQ:image,file=chart.png]" + msg)
 		else:
 			await bot.send_group_msg(group_id = g, message = msg)

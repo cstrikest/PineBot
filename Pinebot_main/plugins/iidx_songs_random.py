@@ -3,8 +3,10 @@
 __author__ = "Yxzh"
 
 from nonebot import *
+from Pinebot_main.util.logger import *
 import json
 import random
+
 
 bot = get_bot()
 
@@ -37,10 +39,11 @@ async def handle_group_message(ctx):
 				if level > 12 or level < 1:
 					await bot.send_group_msg(group_id = g, message = "等级范围错误")
 				else:
-					await bot.send_group_msg(group_id = g, message = getRandomIIDXSpSong(args[1]))
+					msg = getRandomIIDXSpSong(args[1])
+					add_log("IIDX_RANDOM", ctx, msg)
+					await bot.send_group_msg(group_id = g, message = msg)
 			except:
 				await bot.send_group_msg(group_id = g, message = "参数错误")
-		
 		
 		if args[0] == "-dxdp" and len(args) == 2:
 			try:
@@ -48,7 +51,9 @@ async def handle_group_message(ctx):
 				if level > 12 or level < 1:
 					await bot.send_group_msg(group_id = g, message = "等级范围错误")
 				else:
-					await bot.send_group_msg(group_id = g, message = getRandomIIDXDpSong(args[1]))
+					msg = getRandomIIDXDpSong(args[1])
+					add_log("IIDX_RANDOM", ctx, msg)
+					await bot.send_group_msg(group_id = g, message = msg)
 			except:
 				await bot.send_group_msg(group_id = g, message = "参数错误")
 		if args[0] == "-dx" and len(args) == 1:
