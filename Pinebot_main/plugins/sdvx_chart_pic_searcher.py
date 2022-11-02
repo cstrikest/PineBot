@@ -44,24 +44,20 @@ def get_chart_cmd(searchSongName, diffculty):
 		return "搜索歌曲错误。", False
 	
 	try:
-		print("===")
 		url = song[3]
 		Chrome_Driver.browser.get(url)
 		bgImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/img").get_attribute("src")
 		chartImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[1]/img").get_attribute("src")
 		barImgUrl = Chrome_Driver.browser.find_element("xpath","/html/body/table[5]/tbody/tr[2]/td[1]/table/tbody/tr/td/p[2]/img").get_attribute("src")
 		
-		print("===")
 		bgImg = Image.open(BytesIO(requests.get(bgImgUrl).content))
 		chartImg = Image.open(BytesIO(requests.get(chartImgUrl).content))
 		barImg = Image.open(BytesIO(requests.get(barImgUrl).content))
 		
-		print("===")
 		bgImg = bgImg.convert("RGBA")
 		chartImg = chartImg.convert("RGBA")
 		barImg = barImg.convert("RGBA")
 		
-		print("===")
 		resultImg = Image.alpha_composite(Image.alpha_composite(bgImg, chartImg), barImg)
 		resultImg.save("./go-cqhttp/data/images/chart.png")
 	except Exception as e:

@@ -3,9 +3,10 @@
 __author__ = "Yxzh"
 
 import json
+import time
+import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 from bs4 import BeautifulSoup
 from nonebot import *
-import Pinebot_main.util.Chrome_Driver as Chrome_Driver
 
 
 bot = get_bot()
@@ -87,5 +88,32 @@ async def handle_group_message(ctx):
 			await bot.send_group_msg(group_id = g, message = "SDVX谱面数据已更新至最新。")
 		except:
 			await bot.send_group_msg(group_id = g, message = "SDVX谱面数据更新失败。")
-
-		
+	
+	if ctx["raw_message"] == u"-update bms" and ctx["sender"]["user_id"] == 384065633:
+		try:
+			await bot.send_group_msg(group_id = g, message = "开始更新BMS谱面数据。此过程耗时非常长。")
+			
+			bms_songs_h1 = []
+			level = 0
+			Chrome_Driver.browser.get("http://www.ribbit.xyz/bms/tables/insane.html")
+			time.sleep(2)
+			for tr in Chrome_Driver.browser.find_elements("xpath", "/html/body/div/div[6]/div/table/tbody/tr"):
+				if "level_group" in tr.get_attribute("class").split(" "):
+					level += 1
+				else:
+					data = tr.find_elements("xpath", "td")
+					name = data[1].text
+					artist = data[2].text
+					url = data[4].find_element("tag name", "a").get_attribute("href")
+					data = [level, name, artist, url]
+					bms_songs_h1.append(data)
+					print(data)
+			
+			with open("./Pinebot_main/json/bms_songs_h1_list.json", "w", encoding = "utf-8") as f:
+				f.write(json.dumps(bms_songs_h1, ensure_ascii = False, indent = 1))		
+			await bot.send_group_msg(group_id = g, message = "BMS谱面数据已更新至最新。")
+			
+		except Exception as e:
+			print(e)
+			await bot.send_group_msg(group_id = g, message = "BMS谱面数据更新失败。")
+			

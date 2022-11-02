@@ -130,7 +130,9 @@ def get_chart_cmd(cmd, playSide, diffculty):
 		print(e)
 		return "获取谱面图片时发生错误\n", False
 	
-	return song[1][0] + " (ratio:"+ str(song[0])[:5] +")\n", True
+	# return song[1][0] + " (ratio:"+ str(song[0])[:5] +")\n", True
+	return song[1][0], True
+
 # print(get_chart_cmd(["灼热","-o","2A","-m","-c","18","30"]))
 
 @bot.on_message("group")
