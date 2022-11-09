@@ -35,15 +35,33 @@ async def handle_group_message(ctx):
 				await bot.send_group_msg(group_id = g, message = "发狂表1无此等级")
 				return
 		try:
+			_2p = False
+			_mir = False
+			for cmd in args:
+				if cmd == "-1p":
+					args.remove(cmd)
+				if cmd == "-2p":
+					args.remove(cmd)
+					_2p = True
+				if "-m" in cmd:
+					args.remove(cmd)
+					_mir = True
+			
 			name = "".join(args[1:])
 			l = []
 			for song in [x for x in bms_songs_h1 if x[0] == level]:
 				l.append([difflib.SequenceMatcher(None, song[1].lower(), name).ratio(), song])
 			song = max(l)
+			url = song[1][3]
 			print(song)
 			
+			if _2p:
+				url.replace("p=1", "p=2")
+			if _mir:
+				url += "&o=1"
+			
 			Chrome_Driver.browser.set_window_size(4500, 1600)
-			Chrome_Driver.browser.get(song[1][3])
+			Chrome_Driver.browser.get(url)
 			time.sleep(1)
 			img_png = Chrome_Driver.browser.get_screenshot_as_png()
 			img_io = io.BytesIO(img_png)
