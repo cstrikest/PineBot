@@ -79,7 +79,7 @@ def refresh_live_status():
 			live_status[user_now["uid"]] = user_now["live_status"]
 	return False, 0, None, None, None
 
-@scheduler.scheduled_job('interval', seconds = 10)
+@scheduler.scheduled_job('interval', seconds = 300)
 async def _():
 	global live_status
 	trigger, uid, uname, title, room_id = refresh_live_status()
