@@ -177,10 +177,11 @@
 # 				await bot.send_group_msg(group_id = g, message = msg)
 # 			else:
 # 				await bot.send_group_msg(group_id = g, message = u"删除失败。")
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 __author__ = "Yxzh"
 
+import time
 
 from nonebot import *
 from Pinebot_main.util.logger import *
@@ -357,7 +358,7 @@ bilibili_live_notification_list_path = "./Pinebot_main/json/bilibili_live_notifi
 
 bot = get_bot()
 living_list = []  # 当前正在直播中的用户uid List，
-unactivate_group = []   # 非通知群
+unactivate_group = []  # 非通知群
 
 if not os.path.exists(bilibili_live_notification_list_path):
 	with open(bilibili_live_notification_list_path, "w", encoding = "utf-8") as f:
@@ -372,18 +373,20 @@ f.close()
 # 使用bilibili API获取已添加监控用户的直播间状态 错误返回0
 def get_live_status_info():
 	get_msg = ""
+	j = 0
 	for group, uid_list_in_group in data_dic.items():
 		for i in range(0, len(uid_list_in_group)):
-			get_msg += "uids[{}]={}&".format(i, uid_list_in_group[i])
+			get_msg += "uids[{}]={}&".format(j, uid_list_in_group[i])
+			j += 1
 	try:
 		result = requests.get(GET_STATUS_INFO_BY_UIDS_API_URL + get_msg)
 	except:
-		print("更新直播信息错误。")
+		print("更新直播信息错误。(400)")
 		return 0
 	try:
 		result = json.loads(result.text)
 	except:
-		print("直播信息json分析错误。")
+		print("直播信息json分析错误。(401)")
 		return 0
 	return result
 
@@ -393,22 +396,23 @@ def init_living_list():
 	living_list = []
 	api_result = get_live_status_info()
 	# 如果api返回不为空
-	if api_result["data"] != []:
-		# 循环每个api返回的uid直播信息
-		for user in api_result["data"].values():
-			# 判断是否在直播
-			if user["live_status"] == 1:
-				# 在的话 加入正在直播列表
-				living_list.append(user["uid"])
+	try:
+		if api_result["data"] != []:
+			# 循环每个api返回的uid直播信息
+			for user in api_result["data"].values():
+				# 判断是否在直播
+				if user["live_status"] == 1:
+					# 在的话 加入正在直播列表
+					living_list.append(user["uid"])
+	except:
+		print("无法获取直播信息。(405)")
 
 init_living_list()
-# data_list = {11111: [1, 28709771, 13816323, 4, 5, 6], 22222: [13816323, 2, 3, 4, 5, 6, 359680, 8, 9]}
 
 # 使用api请求直播状态 有直播就发消息
-@scheduler.scheduled_job('interval', seconds = 200)
+@scheduler.scheduled_job('interval', seconds = 60)
 async def _():
 	global living_list
-	group_id_to_sent = []
 	# 获取直播信息结果
 	api_result = get_live_status_info()
 	# 如果api返回不为空
@@ -421,8 +425,9 @@ async def _():
 				if user["uid"] not in living_list:
 					living_list.append(user["uid"])
 					# 找这个uid在哪个群添加了直播监控
+					group_id_to_sent = []
 					for group_id, group_uid_list in data_dic.items():
-						if user["uid"] in group_uid_list:
+						if int(user["uid"]) in group_uid_list:
 							# 添加到消息发送群列表
 							group_id_to_sent.append(int(group_id))
 					# 抓取直播图片
@@ -430,11 +435,11 @@ async def _():
 					req = requests.get(url)
 					with open("./go-cqhttp/data/images/live_pic.png", 'wb') as f:
 						f.write(req.content)
+					time.sleep(1)
 					# 发送消息
-					msg = ""
+					msg = "{} 开始直播。\n{}\nhttp://live.bilibili.com/{}\n[CQ:image,file=live_pic.png]".format(
+						user["uname"], user["title"], user["room_id"])
 					for i in group_id_to_sent:
-						msg = "{} 开始直播。\n{}\nhttp://live.bilibili.com/{}\n[CQ:image,file=live_pic.png]".format(
-							user["uname"], user["title"], user["room_id"])
 						await bot.send_group_msg(group_id = int(i), message = msg)
 					add_raw_log("BILI_LIVE_START", str(group_id_to_sent) + msg)
 			
@@ -443,7 +448,6 @@ async def _():
 				# 如果在 正在直播 列表，则判定下播，从 正在直播 列表除去
 				if user["uid"] in living_list:
 					living_list.remove(user["uid"])
-
 @bot.on_message("group")
 async def handle_group_message(ctx):
 	global living_list
@@ -496,7 +500,8 @@ async def handle_group_message(ctx):
 			# 如果已有该用户，直接提示
 			if isinstance(uid, int):
 				if uid in data_dic[sg]:
-					await bot.send_group_msg(group_id = g,  message = u"本群直播列表中已存在 " + user_name + " 的直播间 " + room_name + "。")
+					await bot.send_group_msg(group_id = g,
+					                         message = u"本群直播列表中已存在 " + user_name + " 的直播间 " + room_name + "。")
 					return
 				# 如果没有 添加 保存 刷新
 				elif uid not in data_dic[sg]:
