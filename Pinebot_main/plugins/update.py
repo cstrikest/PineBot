@@ -92,7 +92,6 @@ async def handle_group_message(ctx):
 	if ctx["raw_message"] == u"-update bms" and ctx["sender"]["user_id"] == 384065633:
 		try:
 			await bot.send_group_msg(group_id = g, message = "开始更新BMS谱面数据。此过程耗时非常长。")
-			
 			bms_songs_h1 = []
 			level = 0
 			Chrome_Driver.browser.get("http://www.ribbit.xyz/bms/tables/insane.html")
@@ -117,3 +116,40 @@ async def handle_group_message(ctx):
 			print(e)
 			await bot.send_group_msg(group_id = g, message = "BMS谱面数据更新失败。")
 			
+	if ctx["raw_message"] == u"-update ereter" and ctx["sender"]["user_id"] == 384065633:
+		# try:
+		await bot.send_group_msg(group_id = g, message = "开始更新ereter站数据。此过程耗时较长。")
+		ereter_data = []
+		Chrome_Driver.browser.get("http://ereter.net/iidxsongs/analytics/combined/")
+		time.sleep(2)
+		for tr in Chrome_Driver.browser.find_elements("xpath", "/html/body/div/div/div[2]/div[5]/table/tbody/tr"):
+			data = tr.find_elements("xpath", "td")
+			level = data[0].text.replace("☆", "")
+			name = data[1].text
+			# 0 normal 1 hyper 2 another 3 leggendaria
+			difficulty = 0
+			if "(NORMAL)" in name:
+				name.replace("(ANOTHER)", "")
+				difficulty = 0
+			elif "(HYPER)" in name:
+				name.replace("(ANOTHER)", "")
+				difficulty = 1
+			elif "(ANOTHER)" in name:
+				name.replace("(ANOTHER)", "")
+				difficulty = 2
+			elif "(LEGGENDARIA)" in name:
+				name.replace("(ANOTHER)", "")
+				difficulty = 3
+			ec_diff=data[2].text.replace("★", "")
+			hc_diff=data[3].text.replace("★", "")
+			exhc_diff=data[4].text.replace("★", "")
+			result = [level, name, difficulty, ec_diff, hc_diff, exhc_diff]
+			ereter_data.append(result)
+			print(result)
+		with open("./Pinebot_main/json/ereter.json", "w", encoding = "utf-8") as f:
+			f.write(json.dumps(ereter_data, ensure_ascii = False, indent = 1))
+		await bot.send_group_msg(group_id = g, message = "ereter站数据已更新至最新。")
+		# except Exception as e:
+		# 	print(e)
+		# 	await bot.send_group_msg(group_id = g, message = "ereter站数据更新失败。")
+	

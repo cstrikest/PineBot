@@ -5,7 +5,6 @@ __author__ = "Yxzh"
 from nonebot import *
 from Pinebot_main.util.logger import *
 
-
 bot = get_bot()
 
 @bot.on_message("group")
